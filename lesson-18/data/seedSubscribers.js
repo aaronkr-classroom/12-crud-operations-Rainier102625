@@ -6,10 +6,15 @@
  */
 const mongoose = require("mongoose"),
   Subscriber = require("../models/subscriber");
+  
+mongoose.connect(
+  "mongodb+srv://eodnjs9906:srRXWelx7bYeKx8L@ut-node.rkbl8lc.mongodb.net/?retryWrites=true&w=majority&appName=UT-node", // 데이터베이스 연결 설정, // 경로 lesson15
+);
+mongoose.connection;
+const db = mongoose.connection;
 
-// 데이터베이스 연결 설정
-mongoose.connect("mongodb://127.0.0.1:27017/ut-nodejs", {
-  useNewUrlParser: true,
+db.once("open", () => {
+  console.log("Connected to MONGODB!!!");
 });
 
 mongoose.connection;

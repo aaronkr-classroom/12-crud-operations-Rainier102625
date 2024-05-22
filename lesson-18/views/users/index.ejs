@@ -14,16 +14,22 @@
       <table class="table table-striped table-hover">
         <thead>
           <tr>
-            <th>Username</th>
             <th>Full Name</th>
             <th>Email</th>
             <th>Actions</th>
           </tr>
         </thead>
         <tbody>
-          <!-- 
-            @TODO: 뷰에서 사용자 배열 루핑 탐색 
-          -->
+          <% users.forEach(u => { %>
+            <tr>
+              <td><%= u.fullName %></td>
+              <td><%= u.email %></td>
+              <td>
+                <a hred="/users/<%= u.id %>/edit" %>Edit</a>
+                <a hred="/users/<%= u.id %>/delete" %>Delete</a>
+              </td>
+            </tr>
+          <% }); %>
         </tbody>
       </table>
 
