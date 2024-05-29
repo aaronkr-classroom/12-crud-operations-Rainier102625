@@ -15,10 +15,15 @@ const express = require("express"), // express를 요청
  */
 const mongoose = require("mongoose"); // mongoose를 요청
 // 데이터베이스 연결 설정
-mongoose.connect("mongodb://127.0.0.1:27017/ut-nodejs", {
-  useNewUrlParser: true,
-});
+mongoose.connect(
+  "mongodb+srv://eodnjs9906:srRXWelx7bYeKx8L@ut-node.rkbl8lc.mongodb.net/?retryWrites=true&w=majority&appName=UT-node", // 데이터베이스 연결 설정, // 경로 lesson15
+);
+mongoose.connection;
+const db = mongoose.connection;
 
+db.once("open", () => {
+  console.log("Connected to MONGODB!!!");
+});
 app.set("port", process.env.PORT || 3000);
 
 /**
@@ -45,35 +50,43 @@ app.use(express.json());
 
 /**
  * Listing 19.3 (p. 280)
- * new와 create 라우트를 위한 라우터 추가
- *
- * @TODO: app.get와 app.post를 router.get과 router.post로 변경할 수 있다
+ * 라우트를 위한 라우터 추가
  */
+const router = express.Router();
+app.use("/",router);
 
 /**
  * Listing 12.6 (p. 178)
  * 각 페이지 및 요청 타입을 위한 라우트 추가
  */
-app.get("/", homeController.showHome);
-app.get("/transportation", homeController.showTransportation); // 코스 페이지 위한 라우트 추가
-app.get("/contact", subscribersController.getSubscriptionPage); // 연락처 페이지 위한 라우트 추가
-app.post("/contact", subscribersController.saveSubscriber); // 연락처 제출 양식을 위한 라우트 추가
+router.get("/", homeController.showHome);
+router.get("/transportation", homeController.showTransportation); // 코스 페이지 위한 라우트 추가
+router.get("/contact", subscribersController.getSubscriptionPage); // 연락처 페이지 위한 라우트 추가
+router.post("/contact", subscribersController.saveSubscriber); // 연락처 제출 양식을 위한 라우트 추가
 
-app.get("/subscribers", subscribersController.getAllSubscribers); // 모든 구독자를 위한 라우트 추가
+router.get("/subscribers", subscribersController.getAllSubscribers); // 모든 구독자를 위한 라우트 추가
 
 /**
  * Listing 18.10 (p. 269)
  * userController.js를 위에서 요청
  */
-app.get("/users", usersController.index, usersController.indexView); // index 라우트 생성
+router.get("/users", usersController.index, usersController.indexView); // index 라우트 생성
 
 /**
  * Listing 19.3 (p. 280)
  * 사용자의 new와 create 라우트 추가
  */
-/**
- * @TODO: new, create, redirectView 라우트를 위한 라우터 추가
- */
+router.get("/users/new",usersController.new);
+router.post(
+  "/users/create",
+  usersController.create,
+  usersController.redirectView
+);
+router.get(
+  "/users/:id"
+  ,usersController.show
+  ,usersController.showView
+);
 
 /**
  * Listing 12.12 (p. 184)
